@@ -1,4 +1,5 @@
 import { z } from "zod";
+import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FcGoogle } from "react-icons/fc";
@@ -15,26 +16,25 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import Link from "next/link";
+import { loginSchema } from "../schemas";
+import { useLogin } from "../api/use-login";
 
-const formSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(1, "Password required"),
-});
-
-type TFormSchema = z.infer<typeof formSchema>;
+type TLoginSchema = z.infer<typeof loginSchema>;
 
 export function SignInCard() {
-  const form = useForm<TFormSchema>({
-    resolver: zodResolver(formSchema),
+  const { mutate } = useLogin();
+  const form = useForm<TLoginSchema>({
+    resolver: zodResolver(loginSchema),
     defaultValues: {
       email: "",
       password: "",
     },
   });
 
-  const onSubmit = (values: TFormSchema) => {
-    console.log(values);
+  const onSubmit = (values: TLoginSchema) => {
+    mutate({
+      json: values,
+    });
   };
   return (
     <Card className="w-full h-full md:w-[487px] border-none shadow-none">
