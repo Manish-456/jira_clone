@@ -23,18 +23,13 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
+import { registerSchema } from "../schemas";
 
-const formSchema = z.object({
-  name: z.string().trim().min(1, "Name is required"),
-  email: z.string().email(),
-  password: z.string().min(8, "Minimum 8 characters required"),
-});
-
-type TFormSchema = z.infer<typeof formSchema>;
+type TRegisterSchema = z.infer<typeof registerSchema>;
 
 export function SignUpCard() {
-  const form = useForm<TFormSchema>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<TRegisterSchema>({
+    resolver: zodResolver(registerSchema),
     defaultValues: {
       name: "",
       email: "",
@@ -42,7 +37,7 @@ export function SignUpCard() {
     },
   });
 
-  const onSubmit = (values: TFormSchema) => {
+  const onSubmit = (values: TRegisterSchema) => {
     console.log(values);
   };
   return (
