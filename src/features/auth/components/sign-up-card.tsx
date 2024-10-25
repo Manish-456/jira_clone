@@ -23,11 +23,15 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
+
 import { registerSchema } from "../schemas";
+import { useRegister } from "../api/use-register";
 
 type TRegisterSchema = z.infer<typeof registerSchema>;
 
 export function SignUpCard() {
+  const { mutate } = useRegister();
+
   const form = useForm<TRegisterSchema>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -39,6 +43,9 @@ export function SignUpCard() {
 
   const onSubmit = (values: TRegisterSchema) => {
     console.log(values);
+    mutate({
+      json: values,
+    });
   };
   return (
     <Card className="w-full h-full md:w-[487px] border-none shadow-none">
